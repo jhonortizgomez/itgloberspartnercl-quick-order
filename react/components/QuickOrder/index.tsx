@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation, useLazyQuery } from 'react-apollo'
+import { useCssHandles } from 'vtex.css-handles'
 
 import UPDATE_CART from '../../graphql/updateCart.graphql'
 import GET_PRODUCT from '../../graphql/getProductBySku.graphql'
@@ -15,28 +16,28 @@ const QuickOrder = () => {
     setInputText(e.target.value)
   }
 
-  // useEffect(() => {
-  //   if (product) {
-  //     const skuId = parseInt(inputText)
+  useEffect(() => {
+    if (product) {
+      // const skuId = parseInt(inputText)
 
-  //     // console.log('Mis datos:', skuId, product)
+      // console.log('Mis datos:', skuId, product)
 
-  //     addToCart({
-  //       variables: {
-  //         salesChannel: '1',
-  //         items: [
-  //           {
-  //             id: skuId,
-  //             quantity: 1,
-  //             seller: '1',
-  //           },
-  //         ],
-  //       },
-  //     }).then(() => {
-  //       window.location.href = '/checkout'
-  //     })
-  //   }
-  // }, [product, search, addToCart, inputText])
+      addToCart({
+        variables: {
+          salesChannel: '1',
+          items: [
+            {
+              // id: skuId,
+              quantity: 1,
+              seller: '1',
+            },
+          ],
+        },
+      }).then(() => {
+        window.location.href = '/checkout'
+      })
+    }
+  }, [product, search, addToCart, inputText])
 
   const addProductToCart = () => {
     getProductData({
@@ -57,15 +58,39 @@ const QuickOrder = () => {
     }
   }
 
+  const CSS_HANDLES = [
+    'quickOrder__container',
+    'quickOrder__form',
+    'quickOrder__form_info',
+    'quickOrder__label',
+    'quickOrder__text',
+    'quickOrder__form_submit',
+    'quickOrder__submit',
+  ]
+
+  const handles = useCssHandles(CSS_HANDLES)
+
   return (
-    <div>
-      <h2>Compra rápida de Sony</h2>
-      <form onSubmit={searchProduct}>
-        <div>
-          <label htmlFor="sku">Ingresa el número sku</label>
-          <input id="sku" type="text" onChange={handleChange} />
+    <div className={handles.quickOrder__container}>
+      <form className={handles.quickOrder__form} onSubmit={searchProduct}>
+        <div className={handles.quickOrder__form_info}>
+          <label className={handles.quickOrder__label} htmlFor="sku">
+            Ingresa el número sku
+          </label>
+          <input
+            className={handles.quickOrder__text}
+            id="sku"
+            type="text"
+            onChange={handleChange}
+          />
         </div>
-        <input type="submit" value="Añadir al carrito" />
+        <div className={handles.quickOrder__form_submit}>
+          <input
+            className={handles.quickOrder__submit}
+            type="submit"
+            value="Añadir al carrito"
+          />
+        </div>
       </form>
     </div>
   )
